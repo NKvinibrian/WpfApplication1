@@ -6,12 +6,24 @@ clr.AddReferenceToFileAndPath("IronPython.Modules.dll")
 clr.AddReferenceToFileAndPath("wpf")
 clr.AddReferenceToFileAndPath("json")
 clr.AddReferenceToFileAndPath("struct")
+clr.AddReferenceToFileAndPath("os")
+clr.AddReferenceToFileAndPath("ntpath")
+clr.AddReferenceToFileAndPath("stat")
+clr.AddReferenceToFileAndPath("genericpath")
+clr.AddReferenceToFileAndPath("warnings")
+clr.AddReferenceToFileAndPath("linecache")
+clr.AddReferenceToFileAndPath("types")
+clr.AddReferenceToFileAndPath("UserDict")
+clr.AddReferenceToFileAndPath("_abcoll")
+clr.AddReferenceToFileAndPath("abc")
+clr.AddReferenceToFileAndPath("_weakrefset")
 
 #python import
 import wpf
 import time
 import sys
 import json
+import os
 
 #modulos form import
 from System import *
@@ -36,7 +48,8 @@ class MyWindow(Window):
         self.timer = DispatcherTimer()
         self.timer2 = DispatcherTimer()
         self.filial = sys.argv[1]
-        self.segBar = 20    
+        self.segBar = 20
+        self.default_msg = "" 
         while not self.Load_config():
             time.sleep(10)
         self.timer.Interval = TimeSpan(0, 0, self.seg)          #( 0 , Minutos, Segundos ) update
@@ -52,21 +65,21 @@ class MyWindow(Window):
             self.Quantidade.Content = ""
             try:
                 time.sleep(5)
-                produto = request_get(uri=("http://robot.nisseilabs.com.br/aviso/loja/pedido"+sys.argv[1]))
+                produto = request_get(uri=("http://robot.nisseilabs.com.br/aviso/loja/pedido/2AD6D5EEDAB05C29968CDAC90161CC43D7CBAB48FF625E418C9468E2AE857A07/"+sys.argv[1]))
                 #produto = request_get(uri="http://127.0.0.1:8000/teste")
                 if produto['status']:
-                    self.seg = produto['tempo']
-                    self.cfg_msg = produto['default-msg']
-                    self.segBar = produto['tempo-fechar']
+                    self.seg = int(produto['tempo'])
+                    self.segBar = int(produto['tempo_fechar'])
+                    self.link = produto['link_botao']                    
                     self.Quantidade.Content = produto['qtd_pedidos']
                     if produto['msg'] is not None:
-                        self.Msg.Text = produto['msg']
+                        self.Msg.Text = produto['msg'].replace(",",'\n')
                     self.Show()
                     self.Bt_Close.IsEnabled = False
                     self.timer.Interval = TimeSpan(0, 0, self.seg)
                     self.timer2.Start()
                 else:
-                    self.Msg.Text = self.cfg_msg
+                    self.Msg.Text = ""
                 print(produto)
             except Exception as e:
                 print(e)
@@ -92,12 +105,12 @@ class MyWindow(Window):
     #Carrega a config atravez de requests
     def Load_config(self):
         try:
-            config = request_get(uri=("http://robot.nisseilabs.com.br/aviso/loja/pedido"+sys.argv[1]))        
+            config = request_get(uri=("http://robot.nisseilabs.com.br/aviso/loja/pedido/2AD6D5EEDAB05C29968CDAC90161CC43D7CBAB48FF625E418C9468E2AE857A07/"+sys.argv[1]))        
             #config = request_get(uri="http://127.0.0.1:8000/teste")
             print(config)
-            self.seg = config['tempo']
-            self.cfg_msg = config['default-msg']
-            self.segBar = config['tempo-fechar']
+            self.seg = int(config['tempo'])
+            self.link = config['link_botao']
+            self.segBar = int(config['tempo_fechar'])
             return True
         except Exception as e:
             print(e)
@@ -107,7 +120,11 @@ class MyWindow(Window):
     def Bt_Close_Click(self, sender, e):
         self.Hide()
         self.Bt_Close.IsEnabled = False
-                            
+        
+    def TextBox_Click(self, sender, e):
+        os.system("start "+self.link)
+        pass
+                        
 
 
 #inicializa a thread form 
