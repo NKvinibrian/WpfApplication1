@@ -1,0 +1,1 @@
+ipyc.exe 'C:\Program Files\IronPython 2.7\Lib\genericpath.py' /target:dll /out:genericpath

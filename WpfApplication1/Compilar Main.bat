@@ -1,1 +1,1 @@
-ipyc.exe /target:winexe /embed /standalone /main:.\WpfApplication1.py
+ipyc /target:winexe /embed /platform:x86 /standalone /main:.\WpfApplication1.py

@@ -9,11 +9,15 @@
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
     <IsWindowsApplication>True</IsWindowsApplication>
-    <InterpreterId>IronPython|2.7-64</InterpreterId>
+    <InterpreterId>MSBuild|env|$(MSBuildProjectFullPath)</InterpreterId>
     <LaunchProvider>IronPython (.NET) launcher</LaunchProvider>
     <OutputPath>.</OutputPath>
     <Name>WpfApplication1</Name>
     <RootNamespace>WpfApplication1</RootNamespace>
+    <DebugStdLib>False</DebugStdLib>
+    <InterpreterArguments>
+    </InterpreterArguments>
+    <CommandLineArguments>14</CommandLineArguments>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
@@ -27,6 +31,19 @@
     <Compile Include="WpfApplication1.py" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="bin\IronPython.Modules.dll" />
+    <Content Include="bin\IronPython.Wpf.dll" />
+    <Content Include="bin\json.dll" />
+    <Content Include="bin\struct.dll" />
+    <Content Include="bin\wpf.dll" />
+    <Content Include="bin\WpfApplication1.exe" />
+    <Content Include="bin\WpfApplication1.xaml" />
+    <Content Include="Images\Icone-venda.ico" />
+    <Content Include="Images\Logo_Venda.png" />
+    <Content Include="Images\Logo_Venda2.png" />
+    <Content Include="Logo Venda+.png" />
+    <Content Include="Logo Venda+.svg" />
+    <Content Include="Logo_Venda.png" />
     <Content Include="WpfApplication1.xaml">
       <SubType>Designer</SubType>
     </Content>
@@ -67,6 +84,10 @@
       <PathEnvironmentVariable>PYTHONPATH</PathEnvironmentVariable>
       <Architecture>X64</Architecture>
     </Interpreter>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="bin\" />
+    <Folder Include="Images\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
   <!-- Uncomment the CoreCompile target to enable the Build command in
